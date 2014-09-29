@@ -390,20 +390,20 @@ public class Bibliotheque {
             //est-ce disponible ?
             if (!empruntable.isDisponible())
                 throw new EmpruntableIndisponibleException(this, empruntable);
-            //Si c'est un PC, est-ce bien le 1er ?
+                //Si c'est un PC, est-ce bien le 1er ?
             else if (empruntable instanceof OrdinateurPortable)
                 if (nbOrdinateursEmpruntés > 0)
                     throw new OrdinateurDejaEmprunteException(this, empruntable);
-                //Dans tout les cas, le nb d'emprunts est-il atteint ?
+                    //Dans tout les cas, le nb d'emprunts est-il atteint ?
                 else if (nbEmprunts > NB_EMPRUNTS_MAX)
                     throw new NombreMaximumEmpruntsException(this, empruntable);
-                else {
-                    //On effectue l'emprunt
-                    if (empruntable instanceof OrdinateurPortable) nbOrdinateursEmpruntés++;
-                    nbEmprunts++;
-                    emprunts.add(empruntable);
-                    empruntable.estEmprunte(this);
-                }
+
+            //On effectue l'emprunt
+            if (empruntable instanceof OrdinateurPortable) nbOrdinateursEmpruntés++;
+            nbEmprunts++;
+            emprunts.add(empruntable);
+            empruntable.estEmprunte(this);
+
             return this;
         }
 
