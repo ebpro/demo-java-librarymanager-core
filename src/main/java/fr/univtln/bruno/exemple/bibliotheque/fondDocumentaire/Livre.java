@@ -5,6 +5,9 @@ import fr.univtln.bruno.exemple.bibliotheque.emprunts.ComportementEmpruntable;
 import fr.univtln.bruno.exemple.bibliotheque.emprunts.Empruntable;
 import fr.univtln.bruno.exemple.bibliotheque.personne.Personne;
 
+import java.io.DataOutputStream;
+import java.io.OutputStream;
+
 /**
  * Created by bruno on 26/09/14.
  */
@@ -43,4 +46,5 @@ public class Livre extends Volume implements Empruntable {
                 ", " + comportementEmpruntable +
                 '}';
     }
+
 }
