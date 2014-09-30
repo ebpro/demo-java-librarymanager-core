@@ -31,41 +31,44 @@ public class OrdinateurPortable extends Matériel
         return ordinateurPortable;
     }
 
-    public static void sauver(Collection<OrdinateurPortable> ordinateurPortables, String filename) throws SauvegardeException {
+    public static void exporter(Collection<OrdinateurPortable> ordinateurPortables, String filename) throws SauvegardeException {
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = new FileOutputStream(filename);
         } catch (FileNotFoundException e) {
             new SauvegardeException(e);
         }
-        sauver(ordinateurPortables, fileOutputStream);
+        exporter(ordinateurPortables, fileOutputStream);
     }
 
-    public static void sauver(Collection<OrdinateurPortable> ordinateurPortables, OutputStream outputStream) throws SauvegardeException {
+    public static void exporter(Collection<OrdinateurPortable> ordinateurPortables, OutputStream outputStream) throws SauvegardeException {
         for (OrdinateurPortable o : ordinateurPortables)
             o.sauver(outputStream);
     }
 
-    public static OrdinateurPortable restaurer(Bibliotheque bibliotheque, String filename) throws RestaurationException {
+    public static void importer(Bibliotheque bibliotheque, String filename) throws RestaurationException {
         OrdinateurPortable ordinateurPortable = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(filename);
-            ordinateurPortable = restaurer(bibliotheque, fileInputStream);
+            importer(bibliotheque, fileInputStream);
         } catch (FileNotFoundException e) {
             throw new RestaurationException(e);
         }
-
-        return ordinateurPortable;
     }
 
-    public static OrdinateurPortable restaurer(Bibliotheque bibliotheque, InputStream inputStream) throws RestaurationException {
+    public static void importer(Bibliotheque bibliotheque, InputStream inputStream) throws RestaurationException {
         DataInputStream dataInputStream = new DataInputStream(inputStream);
         String modèle;
         Os os;
         try {
-            modèle = dataInputStream.readUTF();
-            os = Os.values()[dataInputStream.readInt()];
-            return new OrdinateurPortable(bibliotheque, modèle, os);
+            try {
+                while (true) {
+                    modèle = dataInputStream.readUTF();
+                    os = Os.values()[dataInputStream.readInt()];
+                    bibliotheque.addOrdinateurPortable(modèle, os);
+                }
+            } catch (EOFException e) {
+            }
         } catch (IOException e) {
             throw new RestaurationException(e);
         }
