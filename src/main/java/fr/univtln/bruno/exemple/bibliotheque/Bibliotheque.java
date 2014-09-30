@@ -12,10 +12,7 @@ import fr.univtln.bruno.exemple.bibliotheque.matériel.Matériel;
 import fr.univtln.bruno.exemple.bibliotheque.matériel.OrdinateurPortable;
 import fr.univtln.bruno.exemple.bibliotheque.personne.Personne;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -57,6 +54,34 @@ public class Bibliotheque {
         logger.info("Création de la bibliothèque " + nom);
         this.nom = nom;
     }
+
+    /**
+     * retourne la collection des matériels de la bibliothèque
+     *
+     * @return
+     */
+    public Collection<Matériel> getMatériels() {
+        return matériels.values();
+    }
+
+    /**
+     * retourne la collection des adhérents de la bibliothèque
+     *
+     * @return
+     */
+    public Collection<Adhérent> getAdhérents() {
+        return adherents.values();
+    }
+
+    /**
+     * retourne la liste des documents de la bibliothèque
+     *
+     * @return
+     */
+    public Collection<Document> getDocuments() {
+        return documents.values();
+    }
+
 
     /**
      * Ajoute une personne aux auteurs.
