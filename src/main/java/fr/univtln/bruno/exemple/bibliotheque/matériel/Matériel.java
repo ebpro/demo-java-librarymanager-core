@@ -2,10 +2,12 @@ package fr.univtln.bruno.exemple.bibliotheque.matériel;
 
 import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
 
+import java.io.Serializable;
+
 /**
  * Created by bruno on 26/09/14.
  */
-public abstract class Matériel {
+public abstract class Matériel implements Serializable {
     private static int nbItemMatériel = 0;
     public final int ID;
 

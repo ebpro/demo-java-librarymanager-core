@@ -7,11 +7,12 @@ import fr.univtln.bruno.exemple.bibliotheque.personne.Personne;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 
 /**
  * Created by bruno on 26/09/14.
  */
-public class Livre extends Volume implements Empruntable {
+public class Livre extends Volume implements Empruntable, Serializable {
 
     private ComportementEmpruntable comportementEmpruntable = new ComportementEmpruntable();
 

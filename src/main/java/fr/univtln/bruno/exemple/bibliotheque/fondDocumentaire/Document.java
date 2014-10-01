@@ -2,9 +2,10 @@ package fr.univtln.bruno.exemple.bibliotheque.fondDocumentaire;
 
 import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
 
+import java.io.Serializable;
 import java.util.logging.Logger;
 
-public abstract class Document {
+public abstract class Document implements Serializable {
     private static final Logger logger = Logger.getLogger(Document.class.getName());
 
     private String titre;

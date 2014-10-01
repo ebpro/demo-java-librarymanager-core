@@ -6,12 +6,15 @@ import fr.univtln.bruno.exemple.bibliotheque.exceptions.emprunts.*;
 import fr.univtln.bruno.exemple.bibliotheque.exceptions.materiels.MaterielInconnuException;
 import fr.univtln.bruno.exemple.bibliotheque.exceptions.personnes.AdherentInconnuException;
 import fr.univtln.bruno.exemple.bibliotheque.exceptions.personnes.AuteurInconnuException;
+import fr.univtln.bruno.exemple.bibliotheque.exceptions.sauvegarde.RestaurationException;
+import fr.univtln.bruno.exemple.bibliotheque.exceptions.sauvegarde.SauvegardeException;
 import fr.univtln.bruno.exemple.bibliotheque.fondDocumentaire.Document;
 import fr.univtln.bruno.exemple.bibliotheque.fondDocumentaire.Livre;
 import fr.univtln.bruno.exemple.bibliotheque.matériel.Matériel;
 import fr.univtln.bruno.exemple.bibliotheque.matériel.OrdinateurPortable;
 import fr.univtln.bruno.exemple.bibliotheque.personne.Personne;
 
+import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -19,7 +22,7 @@ import java.util.logging.Logger;
  * La classe Bibliothèque est une facade pour la gestion complète d'une bibliothèque. Elle permet de créer des ressources (Documents, Adhérents, Matériel)
  * et les emprunts.
  */
-public class Bibliotheque {
+public class Bibliotheque implements Serializable {
     /**
      * Le logger de la classe courante
      */
@@ -383,10 +386,72 @@ public class Bibliotheque {
         return auteurs.keySet();
     }
 
-    public static final class Adhérent extends Personne {
+    /**
+     * Serialise la bibliotheque dans un fichier.
+     * @param filename Le nom du fichier dans lequel sera serialisée la bibliotheque
+     * @throws SauvegardeException
+     */
+    public void exporter(String filename) throws SauvegardeException {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(filename);
+            exporter(fileOutputStream);
+        } catch (FileNotFoundException e) {
+            throw new SauvegardeException(e);
+        }
+    }
+
+    /**
+     * Serialise la bibliotheque dans un flux.
+     * @param outputStream le flux de destination
+     * @throws SauvegardeException
+     */
+    public void exporter(OutputStream outputStream) throws SauvegardeException {
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(this);
+        } catch (IOException e) {
+            throw new SauvegardeException(e);
+        }
+    }
+
+    /**
+     * Crée une nouvelle instance de Bibliothèque à partir de données serialisée dans un fichier
+     * @param filename le nom du fichier
+     * @return la nouvelle bibliotheque
+     * @throws RestaurationException
+     */
+    public static Bibliotheque importer(String filename) throws RestaurationException {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(filename);
+            return importer(fileInputStream);
+        } catch (FileNotFoundException e) {
+            throw new RestaurationException(e);
+        }
+    }
+
+    /**
+     * Crée une nouvelle instance de Bibliothèque à partir de données serialisée sur un flux.
+     * @param inputStream le flux source des données.
+     * @return la nouvelle bibliotheque
+     * @throws RestaurationException
+     */
+    public static Bibliotheque importer(InputStream inputStream) throws RestaurationException {
+        Bibliotheque bibliotheque = null;
+        ObjectInputStream objectInputStream = null;
+        try {
+            objectInputStream = new ObjectInputStream(inputStream);
+            bibliotheque = (Bibliotheque) objectInputStream.readObject();
+        } catch (IOException e) {
+            throw new RestaurationException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RestaurationException(e);
+        }
+        return bibliotheque;
+    }
+
+    public static final class Adhérent extends Personne implements Serializable{
         private static final Logger logger = Logger.getLogger(Adhérent.class.getName());
         private static final int NB_EMPRUNTS_MAX = 5;
-        ;
         private final Set<Empruntable> emprunts = new HashSet<Empruntable>(NB_EMPRUNTS_MAX);
         private Statut statut;
         private int nbOrdinateursEmpruntés = 0;

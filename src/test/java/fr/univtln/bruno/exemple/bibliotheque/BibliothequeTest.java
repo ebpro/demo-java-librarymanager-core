@@ -1,6 +1,5 @@
 package fr.univtln.bruno.exemple.bibliotheque;
 
-import fr.univtln.bruno.exemple.bibliotheque.fondDocumentaire.Document;
 import fr.univtln.bruno.exemple.bibliotheque.fondDocumentaire.Livre;
 import fr.univtln.bruno.exemple.bibliotheque.matériel.OrdinateurPortable;
 import fr.univtln.bruno.exemple.bibliotheque.personne.Personne;

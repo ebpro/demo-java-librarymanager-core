@@ -3,10 +3,12 @@ package fr.univtln.bruno.exemple.bibliotheque.emprunts;
 
 import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
 
+import java.io.Serializable;
+
 /**
  * Created by bruno on 26/09/14.
  */
-public class ComportementEmpruntable {
+public class ComportementEmpruntable implements Serializable {
     private Bibliotheque.Adhérent emprunteur = null;
 
     public boolean isDisponible() {

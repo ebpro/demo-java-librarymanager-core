@@ -13,9 +13,9 @@ import java.util.Collection;
  * Created by bruno on 26/09/14.
  */
 public class OrdinateurPortable extends Matériel
-        implements Empruntable {
+        implements Empruntable, Serializable {
 
-    private String modèle;
+        private String modèle;
     private Os os;
     private ComportementEmpruntable comportementEmpruntable = new ComportementEmpruntable();
 
@@ -43,7 +43,7 @@ public class OrdinateurPortable extends Matériel
 
     public static void exporter(Collection<OrdinateurPortable> ordinateurPortables, OutputStream outputStream) throws SauvegardeException {
         for (OrdinateurPortable o : ordinateurPortables)
-            o.sauver(outputStream);
+            o.exporter(outputStream);
     }
 
     public static void importer(Bibliotheque bibliotheque, String filename) throws RestaurationException {
@@ -115,14 +115,15 @@ public class OrdinateurPortable extends Matériel
         comportementEmpruntable.estRendu(this);
     }
 
-    public void sauver(String filename) throws SauvegardeException {
+
+    public void exporter(String filename) throws SauvegardeException {
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = new FileOutputStream(filename);
         } catch (FileNotFoundException e) {
             throw new SauvegardeException(e);
         }
-        sauver(fileOutputStream);
+        exporter(fileOutputStream);
         try {
             fileOutputStream.close();
         } catch (IOException e) {
@@ -130,7 +131,7 @@ public class OrdinateurPortable extends Matériel
         }
     }
 
-    public void sauver(OutputStream outputStream) throws SauvegardeException {
+    public void exporter(OutputStream outputStream) throws SauvegardeException {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         try {
             dataOutputStream.writeUTF(modèle);
@@ -140,7 +141,6 @@ public class OrdinateurPortable extends Matériel
             throw new SauvegardeException(e);
         }
     }
-
 
     public enum Os {WINDOWS, LINUX, MACOS}
 }

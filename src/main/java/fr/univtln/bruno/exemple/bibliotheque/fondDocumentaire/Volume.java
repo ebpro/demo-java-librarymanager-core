@@ -3,10 +3,12 @@ package fr.univtln.bruno.exemple.bibliotheque.fondDocumentaire;
 import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
 import fr.univtln.bruno.exemple.bibliotheque.personne.Personne;
 
+import java.io.Serializable;
+
 /**
  * Created by bruno on 26/09/14.
  */
-public abstract class Volume extends Document {
+public abstract class Volume extends Document implements Serializable {
     private Personne auteur;
 
     public Personne getAuteur() {

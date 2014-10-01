@@ -1,10 +1,12 @@
 package fr.univtln.bruno.exemple.bibliotheque.personne;
 
+import java.io.Serializable;
+
 /**
  * Created by bruno on 26/09/14.
  */
-public class Personne {
-    public final Id ID;
+public class Personne implements Serializable {
+    public final Id ID; //ATTENTION la classe Id aussi doit être sérialisable.
     private String nom;
     private String prenom;
 
@@ -43,7 +45,7 @@ public class Personne {
                 '}';
     }
 
-    public static final class Id implements Comparable<Personne.Id> {
+    public static final class Id implements Comparable<Personne.Id>, Serializable {
         public final String EMAIL;
 
         public Id(String email) {
