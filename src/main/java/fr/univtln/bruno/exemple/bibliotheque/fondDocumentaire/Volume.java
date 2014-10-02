@@ -1,7 +1,7 @@
 package fr.univtln.bruno.exemple.bibliotheque.fondDocumentaire;
 
-import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
-import fr.univtln.bruno.exemple.bibliotheque.personne.Personne;
+import fr.univtln.bruno.exemple.bibliotheque.IBibliotheque;
+import fr.univtln.bruno.exemple.bibliotheque.IPersonne;
 
 import java.io.Serializable;
 
@@ -9,17 +9,17 @@ import java.io.Serializable;
  * Created by bruno on 26/09/14.
  */
 public abstract class Volume extends Document implements Serializable {
-    private Personne auteur;
+    private IPersonne auteur;
 
-    public Personne getAuteur() {
+    public IPersonne getAuteur() {
         return auteur;
     }
 
-    public void setAuteur(Personne auteur) {
+    public void setAuteur(IPersonne auteur) {
         this.auteur = auteur;
     }
 
-    public Volume(Bibliotheque bibliotheque, String ISBN, String titre, Personne auteur) {
+    public Volume(IBibliotheque bibliotheque, String ISBN, String titre, IPersonne auteur) {
         super(bibliotheque, ISBN, titre);
         this.auteur = auteur;
     }

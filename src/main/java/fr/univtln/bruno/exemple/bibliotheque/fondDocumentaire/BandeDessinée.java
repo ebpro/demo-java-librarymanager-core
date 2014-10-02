@@ -1,7 +1,7 @@
 package fr.univtln.bruno.exemple.bibliotheque.fondDocumentaire;
 
-import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
-import fr.univtln.bruno.exemple.bibliotheque.personne.Personne;
+import fr.univtln.bruno.exemple.bibliotheque.IBibliotheque;
+import fr.univtln.bruno.exemple.bibliotheque.IPersonne;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ public class BandeDessinée extends Volume implements Serializable{
         this.dessinateur = dessinateur;
     }
 
-    public BandeDessinée(Bibliotheque bibliotheque, String ISBN, String titre, Personne auteur, String dessinateur) {
+    public BandeDessinée(IBibliotheque bibliotheque, String ISBN, String titre, IPersonne auteur, String dessinateur) {
         super(bibliotheque, ISBN, titre, auteur);
         this.dessinateur = dessinateur;
     }

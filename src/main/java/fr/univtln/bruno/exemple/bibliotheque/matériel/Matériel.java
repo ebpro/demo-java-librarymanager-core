@@ -1,6 +1,6 @@
 package fr.univtln.bruno.exemple.bibliotheque.matériel;
 
-import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
+import fr.univtln.bruno.exemple.bibliotheque.IBibliotheque;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ public abstract class Matériel implements Serializable {
     private static int nbItemMatériel = 0;
     public final int ID;
 
-    public Matériel(Bibliotheque bibliotheque) {
+    public Matériel(IBibliotheque bibliotheque) {
         this.ID = nbItemMatériel++;
         bibliotheque.add(this);
     }

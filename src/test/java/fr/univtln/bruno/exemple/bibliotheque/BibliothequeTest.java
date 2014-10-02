@@ -6,20 +6,21 @@ import fr.univtln.bruno.exemple.bibliotheque.personne.Personne;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class BibliothequeTest {
-    private Bibliotheque bibliothèque;
-    Personne personne1 = new Personne("marie.durand@test.fr", "marie", "durand");
-    Personne personne2 = new Personne("jean.martin@test.fr", "jean", "martin");
+    IPersonne personne1 = new Personne("marie.durand@test.fr", "marie", "durand");
+    IPersonne personne2 = new Personne("jean.martin@test.fr", "jean", "martin");
+    private IBibliotheque bibliothèque;
 
     @Before
     public void setUp() throws Exception {
         bibliothèque = new Bibliotheque("Ma Bibliothèque")
                 .addAuteur(personne1)
                 .addAuteur(personne2)
-                .addAdhérent("pierre.dupond@test.fr", "pierre", "dupond", Bibliotheque.Adhérent.Statut.ENSEIGNANT)
-                .addAdhérent("marc.durand@test.fr", "marc", "durand", Bibliotheque.Adhérent.Statut.ETUDIANT)
+                .addAdhérent("pierre.dupond@test.fr", "pierre", "dupond", IBibliotheque.Adhérent.Statut.ENSEIGNANT)
+                .addAdhérent("marc.durand@test.fr", "marc", "durand", IBibliotheque.Adhérent.Statut.ETUDIANT)
                 .addOrdinateurPortable("Vaio", OrdinateurPortable.Os.LINUX)
                 .addOrdinateurPortable("Dell", OrdinateurPortable.Os.WINDOWS)
                 .addOrdinateurPortable("Macbook Pro", OrdinateurPortable.Os.MACOS)
@@ -37,7 +38,7 @@ public class BibliothequeTest {
      */
     @Test
     public void testAddAuteur() throws Exception {
-        Bibliotheque bibliotheque = new Bibliotheque("Test");
+        IBibliotheque bibliotheque = new Bibliotheque("Test");
         bibliotheque.addAuteur(new Personne("prenom1.nom1@ici.fr", "prenom1", "nom1"));
         assertEquals(bibliotheque.getAuteursIds().size(), 1);
 
@@ -55,8 +56,8 @@ public class BibliothequeTest {
      */
     @Test
     public void testGetAuteur() throws Exception {
-        assertEquals(bibliothèque.getAuteur(personne1.ID), personne1);
-        assertEquals(bibliothèque.getAuteur(personne2.ID), personne2);
+        assertEquals(bibliothèque.getAuteur(personne1.getId()), personne1);
+        assertEquals(bibliothèque.getAuteur(personne2.getId()), personne2);
     }
 
     /**
@@ -66,8 +67,8 @@ public class BibliothequeTest {
      */
     @Test
     public void testGetAuteur1() throws Exception {
-        assertEquals(bibliothèque.getAuteur(personne1.ID.EMAIL), personne1);
-        assertEquals(bibliothèque.getAuteur(personne2.ID.EMAIL), personne2);
+        assertEquals(bibliothèque.getAuteur(personne1.getId()), personne1);
+        assertEquals(bibliothèque.getAuteur(personne2.getId()), personne2);
     }
 
     /**
@@ -77,7 +78,7 @@ public class BibliothequeTest {
      */
     @Test
     public void testAdd() throws Exception {
-        Bibliotheque bibliothèque = new Bibliotheque("Ma Bibliothèque")
+        IBibliotheque bibliothèque = new Bibliotheque("Ma Bibliothèque")
                 .addOrdinateurPortable("Vaio", OrdinateurPortable.Os.LINUX);
         assertEquals(bibliothèque.getMaterielIds().size(), 1);
         bibliothèque.addOrdinateurPortable("Dell", OrdinateurPortable.Os.WINDOWS);
@@ -107,7 +108,7 @@ public class BibliothequeTest {
         String docTitle;
         String auteurId;
         Livre livre;
-        Bibliotheque bibliothèque = new Bibliotheque("Ma Bibliothèque")
+        IBibliotheque bibliothèque = new Bibliotheque("Ma Bibliothèque")
                 .addAuteur(personne1)
                 .addAuteur(personne2)
                 .addLivre(docId = "123-XY", docTitle = "Mon livre 1", auteurId = "marie.durand@test.fr");

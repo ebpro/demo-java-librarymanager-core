@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * La classe Bibliothèque est une facade pour la gestion complète d'une bibliothèque. Elle permet de créer des ressources (Documents, Adhérents, Matériel)
  * et les emprunts.
  */
-public class Bibliotheque implements Serializable {
+public class Bibliotheque implements IBibliotheque, Serializable {
     /**
      * Le logger de la classe courante
      */
@@ -34,7 +34,7 @@ public class Bibliotheque implements Serializable {
     /**
      * L'index des auteurs de la bibliothèque
      */
-    private Map<Personne.Id, Personne> auteurs = new HashMap<Personne.Id, Personne>();
+    private Map<IPersonne.Id, IPersonne> auteurs = new HashMap<IPersonne.Id, IPersonne>();
     /**
      * L'index du matériels de la bibliothèque
      */
@@ -46,7 +46,7 @@ public class Bibliotheque implements Serializable {
     /**
      * L'index des adhérents de la bibliothèque
      */
-    private Map<Personne.Id, Adhérent> adherents = new HashMap<Personne.Id, Adhérent>();
+    private Map<IPersonne.Id, Adhérent> adherents = new HashMap<IPersonne.Id, Adhérent>();
 
     /**
      * Constructeur de bibliothèque avec un nom
@@ -56,6 +56,43 @@ public class Bibliotheque implements Serializable {
     public Bibliotheque(String nom) {
         logger.info("Création de la bibliothèque " + nom);
         this.nom = nom;
+    }
+
+    /**
+     * Crée une nouvelle instance de Bibliothèque à partir de données serialisée dans un fichier
+     *
+     * @param filename le nom du fichier
+     * @return la nouvelle bibliotheque
+     * @throws RestaurationException
+     */
+    public static IBibliotheque importer(String filename) throws RestaurationException {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(filename);
+            return importer(fileInputStream);
+        } catch (FileNotFoundException e) {
+            throw new RestaurationException(e);
+        }
+    }
+
+    /**
+     * Crée une nouvelle instance de Bibliothèque à partir de données serialisée sur un flux.
+     *
+     * @param inputStream le flux source des données.
+     * @return la nouvelle bibliotheque
+     * @throws RestaurationException
+     */
+    public static IBibliotheque importer(InputStream inputStream) throws RestaurationException {
+        IBibliotheque bibliotheque = null;
+        ObjectInputStream objectInputStream = null;
+        try {
+            objectInputStream = new ObjectInputStream(inputStream);
+            bibliotheque = (IBibliotheque) objectInputStream.readObject();
+        } catch (IOException e) {
+            throw new RestaurationException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RestaurationException(e);
+        }
+        return bibliotheque;
     }
 
     /**
@@ -85,16 +122,15 @@ public class Bibliotheque implements Serializable {
         return documents.values();
     }
 
-
     /**
      * Ajoute une personne aux auteurs.
      *
      * @param auteur
      * @return
      */
-    public Bibliotheque addAuteur(Personne auteur) {
+    public IBibliotheque addAuteur(IPersonne auteur) {
         logger.finest("Ajout de l'auteur " + auteur);
-        auteurs.put(auteur.ID, auteur);
+        auteurs.put(auteur.getId(), auteur);
         return this;
     }
 
@@ -105,7 +141,7 @@ public class Bibliotheque implements Serializable {
      * @return
      * @throws AuteurInconnuException
      */
-    public Personne getAuteur(String auteurId) throws AuteurInconnuException {
+    public IPersonne getAuteur(String auteurId) throws AuteurInconnuException {
         return getAuteur(new Personne.Id(auteurId));
     }
 
@@ -116,8 +152,8 @@ public class Bibliotheque implements Serializable {
      * @return
      * @throws AuteurInconnuException
      */
-    public Personne getAuteur(Personne.Id auteurId) throws AuteurInconnuException {
-        Personne auteur = auteurs.get(auteurId);
+    public IPersonne getAuteur(IPersonne.Id auteurId) throws AuteurInconnuException {
+        IPersonne auteur = auteurs.get(auteurId);
         if (auteur == null) throw new AuteurInconnuException(auteurId);
         return auteur;
     }
@@ -128,10 +164,10 @@ public class Bibliotheque implements Serializable {
      * @param matériel
      * @return
      */
-    public Matériel add(Matériel matériel) {
+    public IBibliotheque add(Matériel matériel) {
         logger.finest("Ajout du matériel " + matériel);
         matériels.put(matériel.ID, matériel);
-        return matériel;
+        return this;
     }
 
     /**
@@ -140,10 +176,10 @@ public class Bibliotheque implements Serializable {
      * @param matériel
      * @return
      */
-    public Matériel remove(Matériel matériel) {
+    public IBibliotheque remove(Matériel matériel) {
         logger.finest("Suppression du matériel " + matériel);
         matériels.remove(matériel.ID);
-        return matériel;
+        return this;
     }
 
     /**
@@ -152,10 +188,10 @@ public class Bibliotheque implements Serializable {
      * @param document
      * @return
      */
-    public Document add(Document document) {
+    public IBibliotheque add(Document document) {
         logger.finest("Ajout du document " + document);
         documents.put(document.ISBN, document);
-        return document;
+        return this;
     }
 
     /**
@@ -164,10 +200,10 @@ public class Bibliotheque implements Serializable {
      * @param document
      * @return
      */
-    public Document remove(Document document) {
+    public IBibliotheque remove(Document document) {
         logger.finest("Suppression du document " + document);
         documents.remove(document.ISBN);
-        return document;
+        return this;
     }
 
     /**
@@ -176,8 +212,9 @@ public class Bibliotheque implements Serializable {
      * @param adhérent
      * @return
      */
-    public Adhérent add(Adhérent adhérent) {
-        return adherents.put(adhérent.ID, adhérent);
+    public IBibliotheque add(Adhérent adhérent) {
+        adherents.put(adhérent.getId(), adhérent);
+        return this;
     }
 
     /**
@@ -186,9 +223,10 @@ public class Bibliotheque implements Serializable {
      * @param adhérent
      * @return
      */
-    public Adhérent remove(Adhérent adhérent) {
+    public IBibliotheque remove(Adhérent adhérent) {
         logger.finest("Suppression de l'adhérent " + adhérent);
-        return adherents.remove(adhérent);
+        adherents.remove(adhérent);
+        return this;
     }
 
     /**
@@ -221,8 +259,8 @@ public class Bibliotheque implements Serializable {
      * @param statut
      * @return
      */
-    public Bibliotheque addAdhérent(String email, String prenom, String nom, Adhérent.Statut statut) {
-        Adhérent.getInstance(this, email, prenom, nom, statut);
+    public IBibliotheque addAdhérent(String email, String prenom, String nom, Adhérent.Statut statut) {
+        AdhérentEnMemoire.getInstance(this, email, prenom, nom, statut);
         return this;
     }
 
@@ -233,7 +271,7 @@ public class Bibliotheque implements Serializable {
      * @param os
      * @return
      */
-    public Bibliotheque addOrdinateurPortable(String marque, OrdinateurPortable.Os os) {
+    public IBibliotheque addOrdinateurPortable(String marque, OrdinateurPortable.Os os) {
         OrdinateurPortable.getInstance(this, marque, os);
         return this;
     }
@@ -246,7 +284,7 @@ public class Bibliotheque implements Serializable {
      * @param auteur
      * @return
      */
-    public Bibliotheque addLivre(String isbn, String titre, String auteur) throws AuteurInconnuException {
+    public IBibliotheque addLivre(String isbn, String titre, String auteur) throws AuteurInconnuException {
         Livre.getInstance(this, isbn, titre, getAuteur(auteur));
         return this;
     }
@@ -259,7 +297,7 @@ public class Bibliotheque implements Serializable {
      * @param auteur
      * @return
      */
-    public Bibliotheque addLivre(String isbn, String titre, Personne auteur) {
+    public IBibliotheque addLivre(String isbn, String titre, IPersonne auteur) {
         Livre.getInstance(this, isbn, titre, auteur);
         return this;
     }
@@ -297,7 +335,7 @@ public class Bibliotheque implements Serializable {
      * @return
      * @throws AdherentInconnuException
      */
-    public Adhérent getAdhérent(Adhérent.Id id) throws AdherentInconnuException {
+    public Adhérent getAdhérent(IPersonne.Id id) throws AdherentInconnuException {
         Adhérent adhérent = adherents.get(id);
         if (adhérent == null) throw new AdherentInconnuException(id);
         return adhérent;
@@ -314,7 +352,7 @@ public class Bibliotheque implements Serializable {
         return getAdhérent(new Personne.Id(email));
     }
 
-    public Bibliotheque rendreOrdinateur(int id) throws MaterielInconnuException, NonEmpruntableException {
+    public IBibliotheque rendreOrdinateur(int id) throws MaterielInconnuException, NonEmpruntableException {
         try {
             ((Empruntable) getMatériel(id)).estRendu();
         } catch (ClassCastException e) {
@@ -323,7 +361,7 @@ public class Bibliotheque implements Serializable {
         return this;
     }
 
-    public Bibliotheque rendreLivre(String isbn) throws DocumentInconnuException, NonEmpruntableException {
+    public IBibliotheque rendreLivre(String isbn) throws DocumentInconnuException, NonEmpruntableException {
         try {
             ((Empruntable) getDocument(isbn)).estRendu();
         } catch (ClassCastException e) {
@@ -332,12 +370,12 @@ public class Bibliotheque implements Serializable {
         return this;
     }
 
-    public Bibliotheque rendre(Empruntable empruntable) {
+    public IBibliotheque rendre(Empruntable empruntable) {
         empruntable.estRendu();
         return this;
     }
 
-    public Bibliotheque emprunterOrdinateur(String emprunteur, int id) throws MaterielInconnuException, NonEmpruntableException, AdherentInconnuException, EmpruntImpossibleException, DocumentInconnuException {
+    public IBibliotheque emprunterOrdinateur(String emprunteur, int id) throws MaterielInconnuException, NonEmpruntableException, AdherentInconnuException, EmpruntImpossibleException, DocumentInconnuException {
         try {
             emprunter(getAdhérent(emprunteur), (Empruntable) getMatériel(id));
         } catch (ClassCastException e) {
@@ -346,7 +384,7 @@ public class Bibliotheque implements Serializable {
         return this;
     }
 
-    public Bibliotheque emprunterLivre(String emprunteur, String isbn) throws MaterielInconnuException, NonEmpruntableException, AdherentInconnuException, EmpruntImpossibleException, DocumentInconnuException {
+    public IBibliotheque emprunterLivre(String emprunteur, String isbn) throws MaterielInconnuException, NonEmpruntableException, AdherentInconnuException, EmpruntImpossibleException, DocumentInconnuException {
         try {
             emprunter(getAdhérent(emprunteur), (Empruntable) getDocument(isbn));
         } catch (ClassCastException e) {
@@ -355,7 +393,7 @@ public class Bibliotheque implements Serializable {
         return this;
     }
 
-    public Bibliotheque emprunter(Adhérent emprunteur, Empruntable empruntable) throws MaterielInconnuException,
+    public IBibliotheque emprunter(Adhérent emprunteur, Empruntable empruntable) throws MaterielInconnuException,
             AdherentInconnuException, NonEmpruntableException, EmpruntImpossibleException {
         //On vérifie qu'il s'agit bien d'un adhérent de cette bibliothèque.
         if (adherents.containsValue(emprunteur))
@@ -375,19 +413,26 @@ public class Bibliotheque implements Serializable {
     /**
      * @return L'ensemble des Ids des adhérents
      */
-    public Set<Personne.Id> getAdherentsIds() {
+    public Set<IPersonne.Id> getAdherentsIds() {
         return adherents.keySet();
     }
 
     /**
      * @return L'ensemble des Ids des auteurs.
      */
-    public Set<Personne.Id> getAuteursIds() {
+    public Set<IPersonne.Id> getAuteursIds() {
         return auteurs.keySet();
+    }
+
+    @Override
+    public IBibliotheque setNom(String nom) {
+        this.nom = nom;
+        return this;
     }
 
     /**
      * Serialise la bibliotheque dans un fichier.
+     *
      * @param filename Le nom du fichier dans lequel sera serialisée la bibliotheque
      * @throws SauvegardeException
      */
@@ -402,6 +447,7 @@ public class Bibliotheque implements Serializable {
 
     /**
      * Serialise la bibliotheque dans un flux.
+     *
      * @param outputStream le flux de destination
      * @throws SauvegardeException
      */
@@ -414,63 +460,28 @@ public class Bibliotheque implements Serializable {
         }
     }
 
-    /**
-     * Crée une nouvelle instance de Bibliothèque à partir de données serialisée dans un fichier
-     * @param filename le nom du fichier
-     * @return la nouvelle bibliotheque
-     * @throws RestaurationException
-     */
-    public static Bibliotheque importer(String filename) throws RestaurationException {
-        try {
-            FileInputStream fileInputStream = new FileInputStream(filename);
-            return importer(fileInputStream);
-        } catch (FileNotFoundException e) {
-            throw new RestaurationException(e);
-        }
-    }
-
-    /**
-     * Crée une nouvelle instance de Bibliothèque à partir de données serialisée sur un flux.
-     * @param inputStream le flux source des données.
-     * @return la nouvelle bibliotheque
-     * @throws RestaurationException
-     */
-    public static Bibliotheque importer(InputStream inputStream) throws RestaurationException {
-        Bibliotheque bibliotheque = null;
-        ObjectInputStream objectInputStream = null;
-        try {
-            objectInputStream = new ObjectInputStream(inputStream);
-            bibliotheque = (Bibliotheque) objectInputStream.readObject();
-        } catch (IOException e) {
-            throw new RestaurationException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RestaurationException(e);
-        }
-        return bibliotheque;
-    }
-
-    public static final class Adhérent extends Personne implements Serializable{
-        private static final Logger logger = Logger.getLogger(Adhérent.class.getName());
+    public static final class AdhérentEnMemoire extends Personne implements Adhérent, Serializable {
+        private static final Logger logger = Logger.getLogger(AdhérentEnMemoire.class.getName());
         private static final int NB_EMPRUNTS_MAX = 5;
         private final Set<Empruntable> emprunts = new HashSet<Empruntable>(NB_EMPRUNTS_MAX);
-        private Statut statut;
+        private Adhérent.Statut statut;
         private int nbOrdinateursEmpruntés = 0;
         private int nbEmprunts = 0;
 
-        private Adhérent(Personne.Id ID, String nom, String prenom, Statut statut) {
+        private AdhérentEnMemoire(IPersonne.Id ID, String nom, String prenom, Adhérent.Statut statut) {
             super(ID, nom, prenom);
             this.statut = statut;
             logger.info("Ajout de l'adhérent " + this.ID);
         }
 
-        private static Adhérent getInstance(Bibliotheque bibliotheques, Personne.Id id, String nom, String prenom, Statut statut) {
-            Adhérent adherent = new Adhérent(id, nom, prenom, statut);
+        private static Adhérent getInstance(IBibliotheque bibliotheques, IPersonne.Id id, String nom, String prenom, Adhérent.Statut statut) {
+            AdhérentEnMemoire adherent = new AdhérentEnMemoire(id, nom, prenom, statut);
             bibliotheques.add(adherent);
             return adherent;
         }
 
-        private static Adhérent getInstance(Bibliotheque bibliotheques, String id, String nom, String prenom, Statut statut) {
-            return getInstance(bibliotheques, new Id(id)
+        private static Adhérent getInstance(IBibliotheque bibliotheques, String id, String nom, String prenom, Adhérent.Statut statut) {
+            return getInstance(bibliotheques, new Personne.Id(id)
                     , nom, prenom, statut);
         }
 
@@ -497,7 +508,7 @@ public class Bibliotheque implements Serializable {
             return this;
         }
 
-        public Adhérent rendre(Empruntable empruntable) throws RestitutionException {
+        public AdhérentEnMemoire rendre(Empruntable empruntable) throws RestitutionException {
             logger.info(this.ID + " rend " + empruntable);
             //On vérifie que c'est bien cet adhérent qui a fait cet emprunt.
             if (!emprunts.contains(empruntable)) throw new RestitutionException();
@@ -527,7 +538,6 @@ public class Bibliotheque implements Serializable {
         }
 
         public enum Statut {ETUDIANT, ENSEIGNANT}
-
     }
 
 }

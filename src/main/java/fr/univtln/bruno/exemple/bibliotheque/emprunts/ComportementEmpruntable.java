@@ -1,7 +1,7 @@
 package fr.univtln.bruno.exemple.bibliotheque.emprunts;
 
 
-import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
+import fr.univtln.bruno.exemple.bibliotheque.IBibliotheque;
 
 import java.io.Serializable;
 
@@ -9,13 +9,13 @@ import java.io.Serializable;
  * Created by bruno on 26/09/14.
  */
 public class ComportementEmpruntable implements Serializable {
-    private Bibliotheque.Adhérent emprunteur = null;
+    private IBibliotheque.Adhérent emprunteur = null;
 
     public boolean isDisponible() {
         return emprunteur == null;
     }
 
-    public void estEmprunte(Empruntable empruntable, Bibliotheque.Adhérent emprunteur) {
+    public void estEmprunte(Empruntable empruntable, IBibliotheque.Adhérent emprunteur) {
         if (this.emprunteur == emprunteur) return;
         this.emprunteur = emprunteur;
     }

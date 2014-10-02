@@ -1,12 +1,10 @@
 package fr.univtln.bruno.exemple.bibliotheque.fondDocumentaire;
 
-import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
+import fr.univtln.bruno.exemple.bibliotheque.IBibliotheque;
 import fr.univtln.bruno.exemple.bibliotheque.emprunts.ComportementEmpruntable;
 import fr.univtln.bruno.exemple.bibliotheque.emprunts.Empruntable;
-import fr.univtln.bruno.exemple.bibliotheque.personne.Personne;
+import fr.univtln.bruno.exemple.bibliotheque.IPersonne;
 
-import java.io.DataOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 
 /**
@@ -16,13 +14,13 @@ public class Livre extends Volume implements Empruntable, Serializable {
 
     private ComportementEmpruntable comportementEmpruntable = new ComportementEmpruntable();
 
-    public static Livre getInstance(Bibliotheque bibliotheque, String ISBN, String titre, Personne auteur) {
+    public static Livre getInstance(IBibliotheque bibliotheque, String ISBN, String titre, IPersonne auteur) {
         Livre livre = new Livre(bibliotheque, ISBN, titre, auteur);
         bibliotheque.add(livre);
         return livre;
     }
 
-    private Livre(Bibliotheque bibliotheque, String ISBN, String titre, Personne auteur) {
+    private Livre(IBibliotheque bibliotheque, String ISBN, String titre, IPersonne auteur) {
         super(bibliotheque, ISBN, titre, auteur);
     }
 
@@ -32,7 +30,7 @@ public class Livre extends Volume implements Empruntable, Serializable {
     }
 
     @Override
-    public void estEmprunte(Bibliotheque.Adhérent emprunteur) {
+    public void estEmprunte(IBibliotheque.Adhérent emprunteur) {
         comportementEmpruntable.estEmprunte(this, emprunteur);
     }
 

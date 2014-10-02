@@ -1,16 +1,18 @@
 package fr.univtln.bruno.exemple.bibliotheque.personne;
 
+import fr.univtln.bruno.exemple.bibliotheque.IPersonne;
+
 import java.io.Serializable;
 
 /**
  * Created by bruno on 26/09/14.
  */
-public class Personne implements Serializable {
-    public final Id ID; //ATTENTION la classe Id aussi doit être sérialisable.
+public class Personne implements IPersonne, Serializable {
+    public final IPersonne.Id ID; //ATTENTION la classe Id aussi doit être sérialisable.
     private String nom;
     private String prenom;
 
-    public Personne(Id Id, String nom, String prenom) {
+    public Personne(IPersonne.Id Id, String nom, String prenom) {
         this.ID = Id;
         this.nom = nom;
         this.prenom = prenom;
@@ -18,6 +20,11 @@ public class Personne implements Serializable {
 
     public Personne(String Id, String nom, String prenom) {
         this(new Personne.Id(Id), nom, prenom);
+    }
+
+    @Override
+    public IPersonne.Id getId() {
+        return ID;
     }
 
     public String getNom() {
@@ -45,7 +52,7 @@ public class Personne implements Serializable {
                 '}';
     }
 
-    public static final class Id implements Comparable<Personne.Id>, Serializable {
+    public static final class Id implements IPersonne.Id, Serializable {
         public final String EMAIL;
 
         public Id(String email) {
@@ -77,8 +84,13 @@ public class Personne implements Serializable {
         }
 
         @Override
-        public int compareTo(Personne.Id id) {
-            return EMAIL.compareTo(id.EMAIL);
+        public int compareTo(IPersonne.Id id) {
+            return EMAIL.compareTo(id.getEmail());
+        }
+
+        @Override
+        public String getEmail() {
+            return EMAIL;
         }
     }
 }

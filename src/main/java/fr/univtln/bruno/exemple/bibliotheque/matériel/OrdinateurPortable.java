@@ -1,6 +1,6 @@
 package fr.univtln.bruno.exemple.bibliotheque.matériel;
 
-import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
+import fr.univtln.bruno.exemple.bibliotheque.IBibliotheque;
 import fr.univtln.bruno.exemple.bibliotheque.emprunts.ComportementEmpruntable;
 import fr.univtln.bruno.exemple.bibliotheque.emprunts.Empruntable;
 import fr.univtln.bruno.exemple.bibliotheque.exceptions.sauvegarde.RestaurationException;
@@ -19,13 +19,13 @@ public class OrdinateurPortable extends Matériel
     private Os os;
     private ComportementEmpruntable comportementEmpruntable = new ComportementEmpruntable();
 
-    private OrdinateurPortable(Bibliotheque bibliotheque, String modèle, Os os) {
+    private OrdinateurPortable(IBibliotheque bibliotheque, String modèle, Os os) {
         super(bibliotheque);
         this.modèle = modèle;
         this.os = os;
     }
 
-    public static OrdinateurPortable getInstance(Bibliotheque bibliotheque, String modèle, Os os) {
+    public static OrdinateurPortable getInstance(IBibliotheque bibliotheque, String modèle, Os os) {
         OrdinateurPortable ordinateurPortable = new OrdinateurPortable(bibliotheque, modèle, os);
         bibliotheque.add(ordinateurPortable);
         return ordinateurPortable;
@@ -46,7 +46,7 @@ public class OrdinateurPortable extends Matériel
             o.exporter(outputStream);
     }
 
-    public static void importer(Bibliotheque bibliotheque, String filename) throws RestaurationException {
+    public static void importer(IBibliotheque bibliotheque, String filename) throws RestaurationException {
         OrdinateurPortable ordinateurPortable = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(filename);
@@ -56,7 +56,7 @@ public class OrdinateurPortable extends Matériel
         }
     }
 
-    public static void importer(Bibliotheque bibliotheque, InputStream inputStream) throws RestaurationException {
+    public static void importer(IBibliotheque bibliotheque, InputStream inputStream) throws RestaurationException {
         DataInputStream dataInputStream = new DataInputStream(inputStream);
         String modèle;
         Os os;
@@ -106,7 +106,7 @@ public class OrdinateurPortable extends Matériel
     }
 
     @Override
-    public void estEmprunte(Bibliotheque.Adhérent emprunteur) {
+    public void estEmprunte(IBibliotheque.Adhérent emprunteur) {
         comportementEmpruntable.estEmprunte(this, emprunteur);
     }
 

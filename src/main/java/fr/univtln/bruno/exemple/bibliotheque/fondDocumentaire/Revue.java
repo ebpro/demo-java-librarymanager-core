@@ -1,6 +1,6 @@
 package fr.univtln.bruno.exemple.bibliotheque.fondDocumentaire;
 
-import fr.univtln.bruno.exemple.bibliotheque.Bibliotheque;
+import fr.univtln.bruno.exemple.bibliotheque.IBibliotheque;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public abstract class Revue extends Document implements Serializable {
 
-    protected Revue(Bibliotheque bibliotheque, String ISBN, String titre) {
+    protected Revue(IBibliotheque bibliotheque, String ISBN, String titre) {
         super(bibliotheque, ISBN, titre);
     }
 }
