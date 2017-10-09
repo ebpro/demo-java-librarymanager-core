@@ -2,38 +2,47 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.univtln.bruno.exemple.bibliotheque</groupId>
-    <artifactId>bibliojava</artifactId>
+    <properties>
+        <!-- Le nom court du projet a utiliser pour github -->
+        <projectShortName>cours-java-librarymanager-core</projectShortName>
+        <github.account>emmanuelbruno</github.account>
+        <!-- utln login for nexus (maven and docker ) repository on lsis -->
+        <lsisnexus.login>emmanuel.bruno@univ-tln.fr</lsisnexus.login>
+    </properties>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-dptinfoutln-public</id>
+            <name>bintray</name>
+            <url>https://dl.bintray.com/dptinfoutln/public</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-dptinfoutln-public</id>
+            <name>bintray-plugins</name>
+            <url>https://dl.bintray.com/dptinfoutln/public</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <parent>
+        <groupId>fr.univtln.bruno.pom</groupId>
+        <artifactId>common-pom</artifactId>
+        <version>0.7.30-dev-174</version>
+    </parent>
+
+    <groupId>fr.univtln.bruno.coursjava.librarymanager</groupId>
+    <artifactId>librarymanager-core</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>bibliojava</name>
     <url>http://maven.apache.org</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 </project>
