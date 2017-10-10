@@ -1,18 +1,14 @@
 package fr.univtln.bruno.coursjava.librarymanager;
 
 import fr.univtln.bruno.coursjava.librarymanager.emprunts.Empruntable;
-import fr.univtln.bruno.coursjava.librarymanager.exceptions.documents.DocumentInconnuException;
+import fr.univtln.bruno.coursjava.librarymanager.exceptions.documents.*;
 import fr.univtln.bruno.coursjava.librarymanager.exceptions.emprunts.*;
-import fr.univtln.bruno.coursjava.librarymanager.exceptions.materiels.MaterielInconnuException;
-import fr.univtln.bruno.coursjava.librarymanager.exceptions.personnes.AdherentInconnuException;
-import fr.univtln.bruno.coursjava.librarymanager.exceptions.personnes.AuteurInconnuException;
-import fr.univtln.bruno.coursjava.librarymanager.exceptions.sauvegarde.RestaurationException;
-import fr.univtln.bruno.coursjava.librarymanager.exceptions.sauvegarde.SauvegardeException;
-import fr.univtln.bruno.coursjava.librarymanager.fondDocumentaire.Document;
-import fr.univtln.bruno.coursjava.librarymanager.fondDocumentaire.Livre;
-import fr.univtln.bruno.coursjava.librarymanager.matériel.Matériel;
-import fr.univtln.bruno.coursjava.librarymanager.matériel.OrdinateurPortable;
-import fr.univtln.bruno.coursjava.librarymanager.personne.Personne;
+import fr.univtln.bruno.coursjava.librarymanager.exceptions.materiels.*;
+import fr.univtln.bruno.coursjava.librarymanager.exceptions.personnes.*;
+import fr.univtln.bruno.coursjava.librarymanager.exceptions.sauvegarde.*;
+import fr.univtln.bruno.coursjava.librarymanager.fondDocumentaire.*;
+import fr.univtln.bruno.coursjava.librarymanager.matériel.*;
+import fr.univtln.bruno.coursjava.librarymanager.personne.*;
 
 import java.io.*;
 import java.util.*;
