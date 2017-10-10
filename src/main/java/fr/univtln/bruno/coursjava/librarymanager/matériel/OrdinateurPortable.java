@@ -62,13 +62,10 @@ public class OrdinateurPortable extends Matériel
         String modèle;
         Os os;
         try {
-            try {
-                while (true) {
-                    modèle = dataInputStream.readUTF();
-                    os = Os.values()[dataInputStream.readInt()];
-                    bibliotheque.addOrdinateurPortable(modèle, os);
-                }
-            } catch (EOFException e) {
+            while (dataInputStream.available() > 0) {
+                modèle = dataInputStream.readUTF();
+                os = Os.values()[dataInputStream.readInt()];
+                bibliotheque.addOrdinateurPortable(modèle, os);
             }
         } catch (IOException e) {
             throw new RestaurationException(e);
